@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name room_sensor_box_kicad-rescue)(type Legacy)(uri ${KIPRJMOD}/room_sensor_box_kicad-rescue.lib)(options "")(descr ""))
+  (lib (name lm2596)(type Legacy)(uri ${KIPRJMOD}/lm2596.lib)(options "")(descr ""))
+)

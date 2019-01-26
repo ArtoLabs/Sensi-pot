@@ -1,0 +1,27 @@
+Drill report for /home/ger/Desktop/room_sensor_box_kicad/room_sensor_box_kicad.kicad_pcb
+Created on Mon 15 Oct 2018 06:01:11 AM MDT
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'room_sensor_box_kicad.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.70mm  0.028"  (1 hole)  (with 1 slot)
+    T2  0.76mm  0.030"  (54 holes)
+    T3  0.80mm  0.031"  (87 holes)  (with 2 slots)
+    T4  0.90mm  0.035"  (6 holes)
+    T5  1.00mm  0.039"  (3 holes)
+
+    Total plated holes count 151
+
+
+Drill file 'room_sensor_box_kicad-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  3.20mm  0.126"  (4 holes)
+
+    Total unplated holes count 4
