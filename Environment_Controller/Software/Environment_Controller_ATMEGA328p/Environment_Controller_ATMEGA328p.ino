@@ -42,155 +42,62 @@ boolean pollSlave = false;
 boolean getIP = false;
 boolean waitForIP = true;
 char currentTime[11];
-const long interval = 2000;
-const long slaveInterval = 300000;
+const long interval = 2000; 
+const long slaveInterval = 300000;  // Check every 5 minutes
 unsigned long slaveTimer = 0;
 boolean pausePolling = false;
+// Pin assignment for the LCD
 const int rs = 19, en = 18, d4 = 17, d5 = 15, d6 = 14, d7 = 6;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 SimpleDHT11 dht11;
 File myFile;
 SoftwareSerial ESPserial(RX, TX);
 
-
+// Changes the binary value for the shift register
 void activateDevice () {
-  state = allOff;
+  state = allOff; 
   if (humidifierActive) { state = relay1; }
   if (dehumidifierActive) { state = state xor relay2; }
   if (heaterActive) { state = state xor relay3; }
   if (acActive) { state = state xor relay4; }
-  state = allOn - state;
+  state = allOn - state; // The shift register needs the opposite: On = 0, Off = 1
   writeReg(state);
 }
 
 
 void writeReg(byte value) {
-  digitalWrite(latchPin, LOW);    //Pulls the chips latch low
-  for(int i = 0; i < 8; i++){  //Will repeat 8 times (once for each bit)
-    int bit = value & B10000000; //We use a "bitmask" to select only the eighth bit in our number 
+  digitalWrite(latchPin, LOW);    // Pulls the shift register latch low
+  for(int i = 0; i < 8; i++){  // Repeat 8 times (once for each bit)
+    int bit = value & B10000000; // Use a "bitmask" to select only the eighth bit
     if(bit == 128) { 
       digitalWrite(dataPin, HIGH);
     } //if bit 8 is a 1, set our data pin high
     else{ 
       digitalWrite(dataPin, LOW);
     } //if bit 8 is a 0, set the data pin low
-    digitalWrite(clockPin, HIGH);                //the next three lines pulse the clock
+    digitalWrite(clockPin, HIGH);                // The next three lines pulse the clock
     delay(1);
     digitalWrite(clockPin, LOW);
-    value = value << 1;          //we move our number up one bit value
+    value = value << 1;          // Move the number up one bit value
   }
-  digitalWrite(latchPin, HIGH);  //pulls the latch high, to display our data
+  digitalWrite(latchPin, HIGH);  // Pulls the latch high, to display the data
 }
 
 
-void requestHumTemp() {
-    digitalWrite(ledPin, HIGH);
+void requestHumTemp() {  // The DHT11 is polled to find the temp and humidity
+    digitalWrite(ledPin, HIGH); 
     int err = SimpleDHTErrSuccess;
     if ((err = dht11.read(pinDHT11, &temperature, &humidity, NULL)) != SimpleDHTErrSuccess) {
-      /* Serial.print("Read DHT11 failed, err="); 
-      Serial.println(err); */
-
-      lcd.setCursor(0, 0);
-      lcd.print("DHT11 error:    ");
-      lcd.setCursor(0, 1);
-      lcd.print("                ");
-      lcd.setCursor(0, 1);
-      lcd.print(err);   
-      return;
+        // If the DHT11 encounters an error print it to the LCD
+        lcd.clear();
+        lcd.print("DHT11 error:    ");
+        lcd.setCursor(0, 1);
+        lcd.print(err);   
+        return;
     }
-
-    Tf = ((int)temperature * 9.0)/ 5.0 + 32.0; 
+    Tf = ((int)temperature * 9.0)/ 5.0 + 32.0;  // Convert temperature to fahrenheit
     myFile = SD.open("data.txt", FILE_WRITE);
-    String value;
-    if (Tf > 73) {
-      if (heaterActive) {
-          heaterActive = false;
-          //value =  ":Heater deactivated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("Heat deactivated");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-      if ((Tf > 76) && (!acActive)){ 
-          acActive = true;
-          //value =  ":AC activated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("AC activated    ");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-    }
-    else if (Tf < 74) {
-      if (acActive) {
-          acActive = false;
-          //value =  ":AC deactivated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("AC deactivated  ");          
-          if (myFile) {
-            myFile.println(value);
-          }        
-      } 
-      if ((Tf < 70) && (!heaterActive)){
-          heaterActive = true;
-          //value =  ":Heater activated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("Heat activated  ");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-    }
-    if ((int)humidity > 55) {
-      if (humidifierActive) {
-          humidifierActive = false;
-          //value =  ":Humidifier deactivated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("Humid. deactiva.");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-      if (((int)humidity > 58) && (!dehumidifierActive)){
-          dehumidifierActive = true;
-          //value =  ":Dehumidifier activated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("Dehumid. activa.");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-    }
-    if ((int)humidity < 56) {
-      if (dehumidifierActive) {
-          dehumidifierActive = false;
-          //value =  ":Dehumidifier deactivated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("Dehumid. deacti.");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-      if (((int)humidity < 52) && (!humidifierActive)){
-          humidifierActive = true;
-          //value =  ":Humidifier activated";
-          //Serial.println(value);
-          lcd.setCursor(0, 1);
-          lcd.print("Humid. activated");
-          if (myFile) {
-            myFile.println(value);
-          }
-      }
-    }
-    activateDevice();
+    
     String cT = "";
     for (int i=0; i<11; i++) {
       cT += currentTime[i];
@@ -199,30 +106,112 @@ void requestHumTemp() {
     setTime(l);
     char buf[6];
     sprintf(buf,"%02d:%02d", hour(), minute());
-    String t = "";
-    value = t + buf + "   " + (int)Tf + "F  " + (int)humidity + "%";
+    String logdevice;
+    if (Tf > 74) {  //  If the temperature is greater than 74
+      if (heaterActive) {
+          heaterActive = false;
+          logdevice =  cT + ":HE:0";
+          lcd.setCursor(0, 1);
+          lcd.print("Heat deactivated");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+      if ((Tf > 76) && (!acActive)){  //  If the temperature is greater than 76
+          acActive = true;
+          logdevice =  cT + ":AC:1";
+          lcd.setCursor(0, 1);
+          lcd.print("AC activated    ");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+    }
+    else if (Tf < 75) { //  If the temperature is less than 75
+      if (acActive) {
+          acActive = false;
+          logdevice =  cT + ":AC:0";
+          lcd.setCursor(0, 1);
+          lcd.print("AC deactivated  ");          
+          if (myFile) {
+            myFile.println(logdevice);
+          }        
+      } 
+      if ((Tf < 72) && (!heaterActive)){ //  If the temperature is less than 72
+          heaterActive = true;
+          logdevice =  cT + ":HE:1";
+          lcd.setCursor(0, 1);
+          lcd.print("Heat activated  ");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+    }
+    if ((int)humidity > 55) { //  If the humidity is greater than 55
+      if (humidifierActive) {
+          humidifierActive = false;
+          logdevice =  cT + ":HU:0";
+          lcd.setCursor(0, 1);
+          lcd.print("Humid. deactiva.");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+      if (((int)humidity > 58) && (!dehumidifierActive)){ //  If the humidity is greater than 58
+          dehumidifierActive = true;
+          logdevice = cT + ":DH:1";
+          lcd.setCursor(0, 1);
+          lcd.print("Dehumid. activa.");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+    }
+    if ((int)humidity < 56) { //  If the humidity is less than 56
+      if (dehumidifierActive) {
+          dehumidifierActive = false;
+          logdevice = cT + ":DH:0";
+          lcd.setCursor(0, 1);
+          lcd.print("Dehumid. deacti.");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+      if (((int)humidity < 52) && (!humidifierActive)){ //  If the humidity is less than 52
+          humidifierActive = true;
+          logdevice =  ":HU:1";
+          lcd.setCursor(0, 1);
+          lcd.print("Humid. activated");
+          if (myFile) {
+            myFile.println(logdevice);
+          }
+      }
+    }
+    activateDevice();
+    String forlcd = String(buf) + "   " + (int)Tf + "F  " + (int)humidity + "%";
+    String forlog = cT + ":" + (int)Tf + ":" + (int)humidity;
 
     lcd.setCursor(0, 0);
-    lcd.print(value);
+    lcd.print(forlcd);
     if (myFile) {
-        //Serial.println("Logging: " + value);
-        myFile.println(value);
+        myFile.println(forlog); // Log the humidity and temperature
         myFile.close();
     }
     else {
-        //Serial.println("Error reading SD card.");
+        lcd.setCursor(0, 1);
+        lcd.print("Error reading SD"); 
     }
     delay(500);
     digitalWrite(ledPin, LOW);
 }
 
-void getSDdata () {
+void getSDdata () { // Fetches the logging data from the SD card and prints it
+                    // to the ESP01 via serial
     myFile = SD.open("/data.txt", FILE_READ);
     if(myFile) {
         ESPserial.print("<");
         while (myFile.available()) {
           ESPserial.write(myFile.read());
-          //Serial.write(myFile.read());
         }
         ESPserial.println(">");
         myFile.close();
@@ -232,11 +221,13 @@ void getSDdata () {
       lcd.print("Error reading SD"); 
     }
 }
+
+// simply deletes all data on the SD card
 void deleteSDdata () {
     SD.remove("/data.txt");
 }
 
-
+// Receives data from the ESP01 via serial connection
 void recvESPData() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
@@ -262,8 +253,9 @@ void recvESPData() {
     }
 }
 
-
-String makeInfoString (char commandLetter[]) {
+// Prepares a string to be sent to the ESP01 out of a binary (8 characters)
+String makeInfoString (char commandLetter[]) { // Command letter is a code that separates between 
+                                                // polling a manual device state change
     int t = int(Tf);
     int h = int(humidity);
     byte truestate = ~state;
@@ -283,14 +275,13 @@ String makeInfoString (char commandLetter[]) {
 
 
 void setup() {
-    Serial.begin(9600);
+    //Serial.begin(9600); // Used for debugging
     pinMode(pinCS, OUTPUT);
     pinMode(ledPin, OUTPUT);
     pinMode(dataPin, OUTPUT);
     pinMode(latchPin, OUTPUT);
     pinMode(clockPin, OUTPUT);
-    
-    writeReg(allOn);
+    writeReg(allOn); // Turn all devices off: shift regisiter is inverting
     lcd.begin(16, 2);
     lcd.setCursor(0, 0);
     lcd.print("Starting up!");
@@ -314,46 +305,46 @@ void setup() {
 
 }
 
+// Main loop
 void loop() {
     if (getIP) {
       unsigned long currentMillis = millis();
-      ESPserial.print("<3>");
+      ESPserial.print("<3>");  // Request the IP address from the ESP01
       delay(2000);
-      while(!(ESPserial.available())) { 
+      while(!(ESPserial.available())) { // Wait for the response
         unsigned long currentMillisPast = millis();
-        if ((currentMillisPast - currentMillis) > 10000) {
-          break;
+        if ((currentMillisPast - currentMillis) > 10000) { // Timeout after 10 seconds
+          break;                                            // and print error
           lcd.setCursor(0, 0);
           lcd.print("Could not get IP");
         }
       }
       getIP = false;
-      waitForIP = true;
+      waitForIP = true; // No timeout, response is ready
     }
-    if (ESPserial.available()) {
+    if (ESPserial.available()) {  // Handles responses from ESP01
       recvESPData(); 
     }
-    if (newESPData) {
+    if (newESPData) {  // Reacts to parsed ESP01 data
         if (pollSlave) {
             for (int i=0;i<10;i++) {
               currentTime[i] = receivedESPChars[i];
             }
             currentTime[11] = 0;
-            requestHumTemp();
+            requestHumTemp();  // Fetch data from DHT11 and log it
             pollSlave = false;
-            String info = makeInfoString("s");
-            Serial.println(info);
-            ESPserial.print(info);
+            //String info = makeInfoString("s"); // Update ESP01 
+            //ESPserial.print(info);
         }
         else if (waitForIP) {
             lcd.clear();
             lcd.setCursor(0, 0);
             for (int i=0;i<sizeof(receivedESPChars);i++) {
-              lcd.print(receivedESPChars[i]);
+              lcd.print(receivedESPChars[i]);  // Print the IP Address to the LCD
             }
             waitForIP = false;
         }
-        else if (receivedESPChars[0] == '1') {getSDdata();}
+        else if (receivedESPChars[0] == '1') {getSDdata();}  // Gets all data and returns it to ESP01
         else if (receivedESPChars[0] == '2') {        
             lcd.setCursor(0, 1);
             lcd.print("Deleted all data");
@@ -374,8 +365,8 @@ void loop() {
               ESPserial.println("<p>");
             }
         }
-        else if (receivedESPChars[0] == 'D') {        
-
+        else if (receivedESPChars[0] == 'D') {  // The "D" code sent from the ESP01 is given as
+                                                // a command to change the on/off state of a device
           if (receivedESPChars[1] == '1') {
               if (humidifierActive) { humidifierActive = false; }
               else { humidifierActive = true; }
@@ -394,17 +385,16 @@ void loop() {
           }
           activateDevice();
           String info = makeInfoString("d");
-          Serial.println(info);
           ESPserial.println(info);
         }
         else {
           lcd.clear();
           lcd.setCursor(0, 0);
-          lcd.print(receivedESPChars);
+          lcd.print(receivedESPChars);  // If we don't know what the command is print it out
         }
         newESPData = false;
     }
-    unsigned long currentMillis = millis();
+    unsigned long currentMillis = millis();  // If the polling timer is up we poll the DHT11 for temp and humidity
     if ((currentMillis - slaveTimer >= slaveInterval) && (!pausePolling)){
       digitalWrite(ledPin, HIGH);
         slaveTimer = currentMillis;
@@ -413,73 +403,4 @@ void loop() {
       delay(10);
       digitalWrite(ledPin, LOW); 
     }
-    /*
-    if (Serial.available()){recvData();}
-    if (newData) {
-        if (receivedChars[0] == '1') {getSDdata();}
-        else if (receivedChars[0] == '2') {
-            ESPserial.print("<1>");
-            waitForTime = true; 
-        }
-        else if (receivedChars[0] == '3') {
-            Serial.println(currentTime);
-        }
-        else if (receivedChars[0] == '4') {        
-            /* Serial.println("Deleting SD data"); 
-            lcd.clear();
-            lcd.setCursor(0, 0);
-            lcd.print("Deleting all data");
-            deleteSDdata();
-        }
-        else if (receivedChars[0] == '5') {
-            if (pausePolling == true) { 
-              pausePolling = false;
-              /* Serial.println("Logging will resume"); 
-              lcd.clear();
-              lcd.setCursor(0, 0);
-              lcd.print("Logging will resume");
-              ESPserial.println("<u>");
-            }
-            else { 
-              pausePolling = true;
-              /* Serial.println("Logging has been paused"); 
-              lcd.clear();
-              lcd.setCursor(0, 0);
-              lcd.print("Logging has been paused");
-              ESPserial.println("<p>");
-            }
-        }
-        
-        else { Serial.println(receivedChars);}
-        newData = false;
-    }
-    */
-
 }
-
-
-/*
-void recvData() {
-    static boolean recvInProgress = false;
-    static byte ndx = 0;
-    char startMarker = '<';
-    char endMarker = '>';
-    char rc;
-    while (Serial.available() && newData == false) {
-        rc = Serial.read();
-        if (recvInProgress == true) {
-            if (rc != endMarker) {
-                receivedChars[ndx] = rc;
-                ndx++;
-                if (ndx >= numChars) {ndx = numChars - 1;}
-            }
-            else {
-                receivedChars[ndx] = '\0'; // terminate the string
-                recvInProgress = false;
-                ndx = 0;
-                newData = true;
-            }
-        }
-        else if (rc == startMarker) {recvInProgress = true; }
-    }
-} */

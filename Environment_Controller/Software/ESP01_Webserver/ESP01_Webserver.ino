@@ -9,23 +9,27 @@
 typedef int time_t;
 #endif
 
-ESP8266WebServer server ( 80 );
+ESP8266WebServer server ( 80 ); // Start up the web server
 
-const char *ssid = "BuzzOff";
-const char *password = "Dimodem@1950";
+const char *ssid = "";  // These need to be provided to access the local wifi
+const char *password = "";
+
+
 const byte numChars = 32;
 char receivedChars[numChars]; // an array to store the received data
-int iplen = 16;
+int iplen = 16; // Length of the IP address string
 boolean newData = false;
 boolean waitForData = false;
 static boolean recvInProgress = false;
-char ip[16];
+char ip[16]; // The IP address
 boolean pollingPaused = false;
 boolean dataErr = false;
-String temp = "";
+String temp = ""; // for storing the temperature and humidity data
 String humidity = "";
-int devices[8];
+int devices[8]; // Stores the off/on state of all 8 devices
 
+// The CSS and HTML for the webpage have been broken up into 
+// smaller parts for variable page display.
 const char* INDEX_HEADER = R"rawliteral(
 <!DOCTYPE HTML><html>
 <head>
@@ -117,11 +121,13 @@ const char* DEVICE_BUTTON_BOTTOM = R"rawliteral('; document.getElementById('thef
 <div class="btn">
 )rawliteral";
 
+// Creates the index page
 void startPage() {
   server.sendHeader("Content-Type", "text/html");
   server.sendContent(INDEX_HEADER);
 }
 
+// Creates the top of every page
 void makePageTop() {
   time_t now = time(nullptr);
   server.sendContent("<div id='top'><div class='a'>");
@@ -136,6 +142,7 @@ void makePageTop() {
   
 }
 
+// Creates the side bar buttons
 void deviceBtns() {
 
   for (int i=0; i<8; i++) {
@@ -157,6 +164,7 @@ void deviceBtns() {
   
 }
 
+// Creats the side bar
 void makeSideBar() {
   server.sendContent(FORM_HEADER);
   server.sendContent(ip);
@@ -171,18 +179,23 @@ void makeSideBar() {
   server.sendContent(FORM_FOOTER);
   
 }
-  
+
+// Creates the footer of every page
 void makePageBottom() {
   server.sendContent(INDEX_FOOTER);
   server.client().stop();
 }
 
+// Creates the error page
 void returnFail(String msg) {
   server.sendHeader("Connection", "close");
   server.sendHeader("Access-Control-Allow-Origin", "*");
   server.send(500, "text/plain", msg + "\r\n");
 }
 
+// Stores the temperature and humidity retreived from the ATMEGA328P
+// as well as all of the current device on/off states. This is used
+// to display the buttons in the side bar
 void assignDev() {
   temp = receivedChars[1];
   temp += receivedChars[2];
@@ -193,16 +206,18 @@ void assignDev() {
   }
 }
 
+// Parses the form request. All actions are given a single digit code
+// stored in Davalue.
 void handleSubmit() {
   String Davalue;
   String dev;
   Davalue = server.arg("ARG");
   dev = server.arg("ARG2");
-  if (Davalue == "1") {
-    Serial.println("<2>");
+  if (Davalue == "1") {       // Delete all data on the SD card
+    Serial.println("<2>");    // Returns a success code to the ATMEGA328P (only indicates code was received)
     time_t timer = time(nullptr);
     while (!Serial.available()) { 
-      time_t now = time(nullptr);
+      time_t now = time(nullptr);  // Every action has a 10 second timeout period
       if (now > timer + 10) {
         startPage();
         makeSideBar();
@@ -222,10 +237,10 @@ void handleSubmit() {
       dataErr = false;
     }
   }
-  else if (Davalue == "2") {
-    Serial.print("<1>");
+  else if (Davalue == "2") {  // Retieves the logging data from the SD card and display it on the webpage
+    Serial.print("<1>");      // Send the success code to the ATMEGA328P (only indicates code was received)
     waitForData = true;
-    time_t timer = time(nullptr);
+    time_t timer = time(nullptr);  // 10 second timeout period
     while (!Serial.available()) { 
       time_t now = time(nullptr);
       if (now > timer + 10) {
@@ -239,9 +254,9 @@ void handleSubmit() {
       }
     }
   }
-  else if (Davalue == "3") {
+  else if (Davalue == "3") {  // Pauses logging
     Serial.print("<5>");
-    time_t timer = time(nullptr);
+    time_t timer = time(nullptr);   // 10 second timeout period
     while (!Serial.available()) {
       time_t now = time(nullptr);
       if (now > timer + 10) {
@@ -254,7 +269,7 @@ void handleSubmit() {
       }
     }
   }
-  else if (Davalue == "4") {
+  else if (Davalue == "4") {  // Changes the on/off state of a device when the user clicks a button
     Serial.print("<D");
     Serial.print(dev);
     Serial.print(">");
@@ -274,6 +289,7 @@ void handleSubmit() {
   else {returnFail("Bad value");}
 }
 
+// Initial startup creates the index page
 void handleRoot() {
   if (server.hasArg("ARG")) {
     handleSubmit();
@@ -290,9 +306,10 @@ void handleRoot() {
 
 void handleNotFound() { server.send ( 404, "text/plain", "File Not Found\n\n" ); }
 
+// This function parses Serial data sent by the ATMEGA328P
 void recvData() {
     static byte ndx = 0;
-    char startMarker = '<';
+    char startMarker = '<';  // The start and end markers are used to delineate the data
     char endMarker = '>';
     char rc;
     if (waitForData) {
@@ -304,23 +321,23 @@ void recvData() {
     time_t timer = time(nullptr);
     while ((Serial.available() > 0 && newData == false) || (recvInProgress)) {
         time_t now = time(nullptr);
-        if (now > timer + 30) {
+        if (now > timer + 30) {    // 30 second timeout
           recvInProgress = false;
           break;
         }
         if (Serial.available()) {
             rc = Serial.read();
             if (recvInProgress == true) {
-                if (rc != endMarker) {
+                if (rc != endMarker) {  // Wait for the end marker
                     if (waitForData) {
                       if (rc == '\n') {
-                        server.sendContent("<br>");
+                        server.sendContent("<br>");  // Replace linebreaks with br tags
                       }
                       else {
-                        server.sendContent(String(rc));
+                        server.sendContent(String(rc));  // Print the received data to the webpage 
                       }
                     }
-                    receivedChars[ndx] = rc;
+                    receivedChars[ndx] = rc;  // We do this one character at a time
                     ndx++;
                     if (ndx >= numChars) {
                         ndx = numChars - 1;
@@ -334,12 +351,12 @@ void recvData() {
                 }
             }
             else if (rc == startMarker) {
-                recvInProgress = true;
+                recvInProgress = true;  // Keep going
             }
         }
     }
     if (waitForData) {
-      server.sendContent("</div>");
+      server.sendContent("</div>");  // All done
       makePageBottom(); 
       waitForData = false; 
     }
@@ -350,64 +367,62 @@ void setup ( void ) {
 	WiFi.mode ( WIFI_STA );
 	WiFi.begin ( ssid, password );
 	while ( WiFi.status() != WL_CONNECTED ) {delay ( 500 );}
-  configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");
+  configTime(-7 * 3600, 0, "pool.ntp.org", "time.nist.gov");  // We fetch the current time. -7 is for U.S. timezone
+                                                              // Change as needed. plus 12 timezones going east from 
+                                                              // Greenwich, negative 12 timezones going west
   while (!time(nullptr)) {delay(1000);}
-
-  iplen = WiFi.localIP().toString().length() + 1;
+  iplen = WiFi.localIP().toString().length() + 1;             // Get the IP address for the webpage
   WiFi.localIP().toString().toCharArray(ip, iplen);
-
 	server.on ( "/", handleRoot );
 	server.onNotFound ( handleNotFound );
 	server.begin();
 }
 
+// Main loop
 void loop ( void ) {
-  server.handleClient();
-  if ((Serial.available()) && (recvInProgress == false)){
+  server.handleClient(); // Did anything happen on the webpage?
+  if ((Serial.available()) && (recvInProgress == false)){ // Is there any Serial data?
       recvData();
   }
   if (newData) {
-      if (receivedChars[0] == '1') {
+      if (receivedChars[0] == '1') {  // The single digit code 1 requests the current time
+                                      // This request is used for data logging
           time_t t = time(nullptr);
-
           int seconds = (int) t;
-          
           char ds[10];
-          itoa(seconds,ds,10);
-          
+          itoa(seconds,ds,10);      // the time is sent as a UNIX timestamp
           Serial.print ("<");
           for(int i=0;i<10;i++) {
-            Serial.print(ds[i]);
+            Serial.print(ds[i]);    // Send the data back to ATMEGA328P
           }
           Serial.print (">");
       }
-      else if (receivedChars[0] == '2') {
+      else if (receivedChars[0] == '2') { // Code 2 requests the ESP01 sets it's own time to the current time
+                                          // This request is used for displaying the time and date
           time_t t = time(nullptr);
-
           setTime(t);
-          
           char buf[20];
           sprintf(buf,"%d-%02d-%02d %02d:%02d:%02d", year(), month(),
           day(), hour(), minute(), second());
-          
           Serial.print ("<");
           for(int i=0;i<20;i++) {
             Serial.print(buf[i]);
           }
           Serial.print (">");
       }
-      else if (receivedChars[0] == '3') {
-        
+      else if (receivedChars[0] == '3') { // code 3 requests the IP address
           Serial.print ("<");
           for(int i=0;i<iplen;i++) {
             Serial.print(ip[i]);
           }
           Serial.print (">");
       }
-      else if (receivedChars[0] == 's') {
-          assignDev();
-      }
-      else if (receivedChars[0] == 'd') {
+      //else if (receivedChars[0] == 's') { // The ESP01 receives the single letter code "s"
+                                          // as a response to data logging
+      //    assignDev();
+      //}
+      else if (receivedChars[0] == 'd') { // The code "d" is received in response to changing the
+                                          // device on/off state.
           assignDev();
           startPage();
           makeSideBar();
@@ -415,7 +430,7 @@ void loop ( void ) {
           server.sendContent("<div id='content'><h3>Device command accepted</h3></div>");
           makePageBottom();
       }
-      else if (receivedChars[0] == 'p') {
+      else if (receivedChars[0] == 'p') { // Code "p" pauses the data logging
           pollingPaused = true;
           startPage();
           makeSideBar();
@@ -423,7 +438,7 @@ void loop ( void ) {
           server.sendContent("<div id='content'><h3>Logging has been paused</h3></div>");
           makePageBottom();
       }
-      else if (receivedChars[0] == 'u') {
+      else if (receivedChars[0] == 'u') { // Code "u" unpauses the data logging
           pollingPaused = false;
           startPage();
           makeSideBar();
