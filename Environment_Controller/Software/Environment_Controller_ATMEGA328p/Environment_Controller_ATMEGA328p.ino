@@ -23,32 +23,41 @@ const byte relay8 = 0x01; //0b00000001    FAN 4
 const byte allOff = 0x00;
 const byte allOn = 0xFF;
 byte state;
-boolean humidifierActive = false;
-boolean dehumidifierActive = false;
-boolean heaterActive = false;
-boolean acActive = false;
+bool humidifierActive = false;
+bool dehumidifierActive = false;
+bool heaterActive = false;
+bool acActive = false;
 float Tf = 0;
 byte temperature = 0;
 byte humidity = 0;
 const byte numChars = 32;
-//char receivedChars[numChars]; // an array to store the received data
-//boolean newData = false;
 char receivedESPChars[numChars]; // an array to store the received data
-boolean newESPData = false;
+bool newESPData = false;
 char SDChars[numChars]; // an array to store the received data
-boolean SDData = false;
-boolean waitForTime = false;
-boolean pollSlave = false;
-boolean getIP = false;
-boolean waitForIP = true;
+bool SDData = false;
+bool waitForTime = false;
+bool pollSlave = false;
+bool getIP = false;
+bool waitForIP = true;
 char currentTime[11];
-const long interval = 2000; 
-const long slaveInterval = 300000;  // Check every 5 minutes
+bool pollFirstTime = true;    // Don't wait 5 minutes to check the first time.
 unsigned long slaveTimer = 0;
-boolean pausePolling = false;
+unsigned long logTimer = 0;
+bool pausePolling = false;
+
+// User defined variables
+const long slaveInterval = 15000;  // Check every 15 seconds
+const long loggingInterval = 300000;  // log every 5 minutes
+const int targetTemp = 75;
+const int degreesOfForgiveness = 2;
+const int targetHumidity = 55;
+const int percentageOfForgiveness = 1;
+
 // Pin assignment for the LCD
-const int rs = 19, en = 18, d4 = 17, d5 = 15, d6 = 14, d7 = 6;
-LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+//const int rs = 19, en = 18, d4 = 17, d5 = 15, d6 = 14, d7 = 6;
+//LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
+LiquidCrystal lcd(19, 18, 17, 15, 14, 6);
+
 SimpleDHT11 dht11;
 File myFile;
 SoftwareSerial ESPserial(RX, TX);
@@ -90,13 +99,13 @@ void requestHumTemp() {  // The DHT11 is polled to find the temp and humidity
     if ((err = dht11.read(pinDHT11, &temperature, &humidity, NULL)) != SimpleDHTErrSuccess) {
         // If the DHT11 encounters an error print it to the LCD
         lcd.clear();
-        lcd.print("DHT11 error:    ");
+        lcd.print(F("DHT11 error:    "));
         lcd.setCursor(0, 1);
         lcd.print(err);   
         return;
     }
     Tf = ((int)temperature * 9.0)/ 5.0 + 32.0;  // Convert temperature to fahrenheit
-    myFile = SD.open("data.txt", FILE_WRITE);
+    
     
     String cT = "";
     for (int i=0; i<11; i++) {
@@ -104,105 +113,123 @@ void requestHumTemp() {  // The DHT11 is polled to find the temp and humidity
     }
     long l = cT.toInt();
     setTime(l);
-    char buf[6];
-    sprintf(buf,"%02d:%02d", hour(), minute());
-    String logdevice;
-    if (Tf > 74) {  //  If the temperature is greater than 74
+    char hourminute[6];
+    sprintf(hourminute,"%02d:%02d", hour(), minute());
+    char logdevice[20];
+    if (Tf > targetTemp) {  //  If the temperature is greater than 75
       if (heaterActive) {
           heaterActive = false;
-          logdevice =  cT + ":HE:0";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":HE:0");
           lcd.setCursor(0, 1);
-          lcd.print("Heat deactivated");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("Heat deactivated"));
+          printDevActivityToLog(logdevice);
       }
-      if ((Tf > 76) && (!acActive)){  //  If the temperature is greater than 76
+      if ((Tf > targetTemp + degreesOfForgiveness) && (!acActive)){  //  If the temperature is greater than 77
           acActive = true;
-          logdevice =  cT + ":AC:1";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":AC:1");
           lcd.setCursor(0, 1);
-          lcd.print("AC activated    ");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("AC activated    "));
+          printDevActivityToLog(logdevice);
       }
     }
-    else if (Tf < 75) { //  If the temperature is less than 75
+    else if (Tf < targetTemp) { //  If the temperature is less than 75
       if (acActive) {
           acActive = false;
-          logdevice =  cT + ":AC:0";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":AC:0");
           lcd.setCursor(0, 1);
-          lcd.print("AC deactivated  ");          
-          if (myFile) {
-            myFile.println(logdevice);
-          }        
+          lcd.print(F("AC deactivated  "));          
+          printDevActivityToLog(logdevice);    
       } 
-      if ((Tf < 72) && (!heaterActive)){ //  If the temperature is less than 72
+      if ((Tf < targetTemp - degreesOfForgiveness) && (!heaterActive)){ //  If the temperature is less than 73
           heaterActive = true;
-          logdevice =  cT + ":HE:1";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":HE:1");
           lcd.setCursor(0, 1);
-          lcd.print("Heat activated  ");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("Heat activated  "));
+          printDevActivityToLog(logdevice);
       }
     }
-    if ((int)humidity > 55) { //  If the humidity is greater than 55
+    if ((int)humidity > targetHumidity) { //  If the humidity is greater than 55
       if (humidifierActive) {
           humidifierActive = false;
-          logdevice =  cT + ":HU:0";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":HU:0");
           lcd.setCursor(0, 1);
-          lcd.print("Humid. deactiva.");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("Humid. deactiva."));
+          printDevActivityToLog(logdevice);
       }
-      if (((int)humidity > 58) && (!dehumidifierActive)){ //  If the humidity is greater than 58
+      if (((int)humidity > targetHumidity + percentageOfForgiveness) && (!dehumidifierActive)){ //  If the humidity is greater than 56
           dehumidifierActive = true;
-          logdevice = cT + ":DH:1";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":DH:1");
           lcd.setCursor(0, 1);
-          lcd.print("Dehumid. activa.");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("Dehumid. activa."));
+          printDevActivityToLog(logdevice);
       }
     }
-    if ((int)humidity < 56) { //  If the humidity is less than 56
+    if ((int)humidity < targetHumidity) { //  If the humidity is less than 55
       if (dehumidifierActive) {
           dehumidifierActive = false;
-          logdevice = cT + ":DH:0";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":DH:0");
           lcd.setCursor(0, 1);
-          lcd.print("Dehumid. deacti.");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("Dehumid. deacti."));
+          printDevActivityToLog(logdevice);
       }
-      if (((int)humidity < 52) && (!humidifierActive)){ //  If the humidity is less than 52
+      if (((int)humidity < targetHumidity - percentageOfForgiveness) && (!humidifierActive)){ //  If the humidity is less than 54
           humidifierActive = true;
-          logdevice =  ":HU:1";
+          strcpy(logdevice, currentTime);
+          strcat(logdevice, ":HU:1");
           lcd.setCursor(0, 1);
-          lcd.print("Humid. activated");
-          if (myFile) {
-            myFile.println(logdevice);
-          }
+          lcd.print(F("Humid. activated"));
+          printDevActivityToLog(logdevice);
       }
     }
     activateDevice();
-    String forlcd = String(buf) + "   " + (int)Tf + "F  " + (int)humidity + "%";
-    String forlog = cT + ":" + (int)Tf + ":" + (int)humidity;
 
     lcd.setCursor(0, 0);
-    lcd.print(forlcd);
-    if (myFile) {
-        myFile.println(forlog); // Log the humidity and temperature
-        myFile.close();
-    }
-    else {
-        lcd.setCursor(0, 1);
-        lcd.print("Error reading SD"); 
-    }
+    lcd.print(hourminute);
+    lcd.print(F("   "));
+    lcd.print((int)Tf);
+    lcd.print(F("F  "));
+    lcd.print((int)humidity);
+    lcd.print(F("%"));
+    printDataToLog(currentTime, (int)Tf, (int)humidity);
     delay(500);
     digitalWrite(ledPin, LOW);
+}
+
+void printDevActivityToLog (char *devstate) {
+    myFile = SD.open("data.txt", FILE_WRITE);
+    if (myFile) {
+        myFile.println(devstate);
+    }
+    myFile.close();
+}
+
+void printDataToLog (char* curtime, int temp, int humid) {
+    unsigned long currentMillis2 = millis();  
+    if (currentMillis2 - logTimer >= loggingInterval){  // If the logging timer is up we log 
+        logTimer = currentMillis2;
+        myFile = SD.open("data.txt", FILE_WRITE);
+        if (myFile) {
+            myFile.print(curtime);
+            myFile.print(":");
+            myFile.print(temp);
+            myFile.print(":");
+            myFile.println(humid);
+            lcd.setCursor(0, 1);
+            lcd.print(F("Log data to SD  ")); 
+        }
+        else {
+            lcd.setCursor(0, 1);
+            lcd.print(F("Err write to SD ")); 
+        }
+        myFile.close();
+    }
 }
 
 void getSDdata () { // Fetches the logging data from the SD card and prints it
@@ -218,7 +245,7 @@ void getSDdata () { // Fetches the logging data from the SD card and prints it
     }
     else {
       lcd.setCursor(0, 1);
-      lcd.print("Error reading SD"); 
+      lcd.print(F("Error reading SD")); 
     }
 }
 
@@ -284,24 +311,25 @@ void setup() {
     writeReg(allOn); // Turn all devices off: shift regisiter is inverting
     lcd.begin(16, 2);
     lcd.setCursor(0, 0);
-    lcd.print("Starting up!");
+    lcd.print(F("Starting up!"));
+    delay(1000);
     if (SD.begin()) {
        lcd.setCursor(0, 0);
-       lcd.print("SD card ready  ");
+       lcd.print(F("SD card ready  "));
        delay(1000);
     }
     else {
        lcd.setCursor(0, 0);
-       lcd.print("Error:          ");
+       lcd.print(F("Error:          "));
        lcd.setCursor(0, 1);
-       lcd.print("No SD card found");
+       lcd.print(F("No SD card found"));
        delay(1000);
     }
     ESPserial.begin(9600);
     delay(30);
     getIP = true;
     lcd.setCursor(0, 0);
-    lcd.print("Getting IP      ");
+    lcd.print(F("Getting IP      "));
 
 }
 
@@ -316,7 +344,7 @@ void loop() {
         if ((currentMillisPast - currentMillis) > 10000) { // Timeout after 10 seconds
           break;                                            // and print error
           lcd.setCursor(0, 0);
-          lcd.print("Could not get IP");
+          lcd.print(F("Could not get IP"));
         }
       }
       getIP = false;
@@ -333,8 +361,8 @@ void loop() {
             currentTime[11] = 0;
             requestHumTemp();  // Fetch data from DHT11 and log it
             pollSlave = false;
-            //String info = makeInfoString("s"); // Update ESP01 
-            //ESPserial.print(info);
+            String info = makeInfoString("s"); // Update ESP01 
+            ESPserial.print(info);
         }
         else if (waitForIP) {
             lcd.clear();
@@ -343,11 +371,12 @@ void loop() {
               lcd.print(receivedESPChars[i]);  // Print the IP Address to the LCD
             }
             waitForIP = false;
+            delay(5000);
         }
         else if (receivedESPChars[0] == '1') {getSDdata();}  // Gets all data and returns it to ESP01
         else if (receivedESPChars[0] == '2') {        
             lcd.setCursor(0, 1);
-            lcd.print("Deleted all data");
+            lcd.print(F("Deleted all data"));
             deleteSDdata();
             ESPserial.print("<deleted>");
         }
@@ -355,13 +384,13 @@ void loop() {
             if (pausePolling == true) { 
               pausePolling = false;
               lcd.setCursor(0, 1);
-              lcd.print("Logging resumed ");
+              lcd.print(F("Logging resumed "));
               ESPserial.println("<u>");
             }
             else { 
               pausePolling = true;
               lcd.setCursor(0, 1);
-              lcd.print("Logging paused  ");
+              lcd.print(F("Logging paused  "));
               ESPserial.println("<p>");
             }
         }
@@ -395,7 +424,8 @@ void loop() {
         newESPData = false;
     }
     unsigned long currentMillis = millis();  // If the polling timer is up we poll the DHT11 for temp and humidity
-    if ((currentMillis - slaveTimer >= slaveInterval) && (!pausePolling)){
+    if (((currentMillis - slaveTimer >= slaveInterval) && (!pausePolling)) || (pollFirstTime)){
+      pollFirstTime = false;
       digitalWrite(ledPin, HIGH);
         slaveTimer = currentMillis;
         ESPserial.print("<1>");
