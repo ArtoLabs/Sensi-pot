@@ -11,8 +11,8 @@ typedef int time_t;
 
 ESP8266WebServer server ( 80 ); // Start up the web server
 
-const char *ssid = "";  // These need to be provided to access the local wifi
-const char *password = "";
+const char *ssid = "BuzzOff";  // These need to be provided to access the local wifi
+const char *password = "Dimodem@1950";
 
 
 const byte numChars = 32;
@@ -417,10 +417,10 @@ void loop ( void ) {
           }
           Serial.print (">");
       }
-      //else if (receivedChars[0] == 's') { // The ESP01 receives the single letter code "s"
-                                          // as a response to data logging
-      //    assignDev();
-      //}
+      else if (receivedChars[0] == 's') { // The ESP01 receives the single letter code "s"
+                                          // as a response to data logging 
+          assignDev();
+      }
       else if (receivedChars[0] == 'd') { // The code "d" is received in response to changing the
                                           // device on/off state.
           assignDev();
