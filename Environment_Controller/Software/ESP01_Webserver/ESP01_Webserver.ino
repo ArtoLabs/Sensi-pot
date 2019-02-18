@@ -11,8 +11,8 @@ typedef int time_t;
 
 ESP8266WebServer server ( 80 ); // Start up the web server
 
-const char *ssid = "BuzzOff";  // These need to be provided to access the local wifi
-const char *password = "Dimodem@1950";
+const char *ssid = "";  // These need to be provided to access the local wifi
+const char *password = "";
 
 
 const byte numChars = 32;
