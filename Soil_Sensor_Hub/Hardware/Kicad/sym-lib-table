@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name Soil_Sensor_Hub-cache)(type Legacy)(uri "/home/sensi/Desktop/Sensi-Pot Prototypes/Soil_Sensor_Hub/Soil_Sensor_Hub-cache.lib")(options "")(descr ""))
+  (lib (name Soil_Sensor_Hub-rescue)(type Legacy)(uri ${KIPRJMOD}/Soil_Sensor_Hub-rescue.lib)(options "")(descr ""))
+)

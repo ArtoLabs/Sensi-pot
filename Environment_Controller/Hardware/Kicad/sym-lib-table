@@ -1,4 +1,3 @@
 (sym_lib_table
-  (lib (name room_sensor_box_kicad-rescue)(type Legacy)(uri ${KIPRJMOD}/room_sensor_box_kicad-rescue.lib)(options "")(descr ""))
-  (lib (name lm2596)(type Legacy)(uri ${KIPRJMOD}/lm2596.lib)(options "")(descr ""))
+  (lib (name Environment_Controller_KiCad_THT-rescue)(type Legacy)(uri ${KIPRJMOD}/Environment_Controller_KiCad_THT-rescue.lib)(options "")(descr ""))
 )

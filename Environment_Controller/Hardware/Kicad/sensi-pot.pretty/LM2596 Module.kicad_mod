@@ -1,8 +1,0 @@
-(module "LM2596 Module" (layer F.Cu) (tedit 5AE75B1E)
-  (fp_text reference REF** (at 8.89 8.89) (layer F.SilkS)
-    (effects (font (size 1 1) (thickness 0.15)))
-  )
-  (fp_text value "LM2596 Module" (at 0 -7.62) (layer F.Fab)
-    (effects (font (size 1 1) (thickness 0.15)))
-  )
-)

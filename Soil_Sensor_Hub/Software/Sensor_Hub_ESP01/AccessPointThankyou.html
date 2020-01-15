@@ -1,0 +1,68 @@
+<!DOCTYPE HTML><html>
+<head>
+<title>Seni-Pot Sensor and Device Hub</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<style>
+.form-style-6{
+  font: 95% Arial, Helvetica, sans-serif;
+  max-width: 400px;
+  margin: 10px auto;
+  padding: 16px;
+  background: #F7F7F7;
+}
+.form-style-6 h1{
+  background: #43D1AF;
+  padding: 20px 0;
+  font-size: 140%;
+  font-weight: 300;
+  text-align: center;
+  color: #fff;
+  margin: -16px -16px 16px -16px;
+}
+</style>
+<script language="javascript">
+var ajaxRequest = null;
+var ajaxResult = null;
+var count = 15;
+var attempts = 0;
+if (window.XMLHttpRequest) { ajaxRequest =new XMLHttpRequest(); }
+else { ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP"); }
+function ajaxLoad(ajaxURL) {
+	if(!ajaxRequest){ alert("AJAX is not supported."); return; }
+	ajaxRequest.open("GET",ajaxURL,true);
+	ajaxRequest.onreadystatechange = function() {
+		if(ajaxRequest.readyState == 4 && ajaxRequest.status==200) {
+			document.getElementById("msg").innerHTML = ajaxRequest.responseText; 
+		}
+	}
+	ajaxRequest.send();
+}
+var si = setInterval(function(){
+	if (attempts > 2) {
+		document.getElementById("msg").innerHTML = "It seems the WiFi connection could not be established. Please click back and try again.";
+	}
+	else if (document.getElementById("counter")) {
+		document.getElementById("counter").innerHTML = count;
+		count--;
+		if (count < 1) {
+			ajaxLoad("http://192.168.4.1:81?ARG=getipaddress");
+			count = 15;
+			attempts++;
+		}
+	}
+	else {
+		clearInterval(si);
+	}
+}, 1000);
+
+
+</script>
+</head>
+<body>
+<div class="form-style-6">
+<h1>Thank you!</h1>
+<h3 id="msg">Please wait for this page to automatically reload in&nbsp;<span id="counter"></span>&nbsp;seconds with the IP address you will need to access this device on your router.</h3>
+</div>
+</body>
+</html>

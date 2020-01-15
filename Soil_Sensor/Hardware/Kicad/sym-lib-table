@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name custom_library)(type Legacy)(uri "/home/sensi/Desktop/Sensi-Pot Prototypes/Soil_Sensor_THT_Kicad/custom_library.lib")(options "")(descr ""))
+  (lib (name New_Library)(type Legacy)(uri "/home/sensi/Desktop/Sensi-Pot Prototypes/Soil_Sensor_THT_Kicad/New_Library.lib")(options "")(descr ""))
+)

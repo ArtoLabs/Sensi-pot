@@ -1,0 +1,30 @@
+Drill report for /home/sensi/Desktop/Sensi-Pot Prototypes/Soil_Sensor_Hub_THT_Kicad/Soil_Sensor_Hub.kicad_pcb
+Created on Tue 14 Jan 2020 10:26:26 AM MST
+
+Copper Layer Stackup:
+    =============================================================
+    L1 :  F.Cu                      front
+    L2 :  B.Cu                      back
+
+
+Drill file 'Soil_Sensor_Hub-PTH.drl' contains
+    plated through holes:
+    =============================================================
+    T1  0.40mm  0.016"  (88 holes)
+    T2  0.60mm  0.024"  (16 holes)  (with 16 slots)
+    T3  0.70mm  0.028"  (76 holes)
+    T4  0.80mm  0.031"  (142 holes)
+    T5  0.85mm  0.033"  (4 holes)
+    T6  0.90mm  0.035"  (74 holes)
+    T7  1.00mm  0.039"  (22 holes)  (with 3 slots)
+    T8  1.10mm  0.043"  (3 holes)
+
+    Total plated holes count 425
+
+
+Drill file 'Soil_Sensor_Hub-NPTH.drl' contains
+    unplated through holes:
+    =============================================================
+    T1  3.20mm  0.126"  (4 holes)
+
+    Total unplated holes count 4

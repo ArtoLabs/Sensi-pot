@@ -1,0 +1,586 @@
+<!DOCTYPE HTML><html>
+<head>
+<title>Seni-Pot Environment Controller</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<style>
+canvas {margin-top: 40px; margin-bottom: 100px;}
+.alert {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	z-index: 100;
+	transition: opacity 0.4s;
+}
+.name {
+	position: relative;
+	float: left;
+	clear: left;
+	padding: 3px;
+}
+.inputbox {
+	position: relative;
+	float: left;
+	padding: 3px;
+}
+</style>
+</head>
+<body>
+<div class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<a class="navbar-brand" href="#"><i class="fa fa-leaf"></i>&nbsp;Sensi-pot</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#MyNav"
+	aria-controls="MyNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="MyNav">
+		<ul class="navbar-nav mx-auto"><h2 class="text-white" id="devicetitle">Environment Controller</h2></ul>
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="timezoneDropdown" role="button" 
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-globe"></i>&nbsp;<span id="6">Timezone</id>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="timezoneDropdown">
+					<a class="dropdown-item" href="#" onclick="tsubmit(-12); return false;">-12</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-11); return false;">-11</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-10); return false;">-10</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-9); return false;">-9</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-8); return false;">-8</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-7); return false;">-7</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-6); return false;">-6</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-5); return false;">-5</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-4); return false;">-4</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-3); return false;">-3</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-2); return false;">-2</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(-1); return false;">-1</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(0); return false;">0</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(1); return false;">1</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(2); return false;">2</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(3); return false;">3</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(4); return false;">4</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(5); return false;">5</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(6); return false;">6</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(7); return false;">7</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(8); return false;">8</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(9); return false;">9</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(10); return false;">10</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(11); return false;">11</a>
+					<a class="dropdown-item" href="#" onclick="tsubmit(12); return false;">12</a>
+				</div>
+			</li>
+			<li class="nav-item dropdown">
+				<a class="nav-link dropdown-toggle" href="#" id="intervalDropdown" role="button" 
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-clock-o"></i>&nbsp;<span id="7">Log every: 1 hour</id>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="intervalDropdown">
+					<a class="dropdown-item" href="#" onclick="lsubmit(60); return false;">1 minute</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(300); return false;">5 minutes</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(600); return false;">10 minutes</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(1200); return false;">20 minutes</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(3600); return false;">1 hour</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(7200); return false;">2 hours</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(10800); return false;">3 hours</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(21600); return false;">6 hours</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(43200); return false;">12 hours</a>
+					<a class="dropdown-item" href="#" onclick="lsubmit(86400); return false;">24 hours</a>
+				</div>
+			</li>
+			<li class="nav-item dropdown" >
+				<a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" 
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-cogs"></i>&nbsp;<span id="settings">Settings</span>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="settingsDropdown">
+					<a href="#" onclick="dsubmit(8); return false;" class="dropdown-item">
+						<i class="fa fa-podcast"></i>&nbsp;&nbsp;&nbsp;<span id="8">Alarm is ON</span></a>
+					<a href="#" onclick="fsubmit(1); return false;" class="dropdown-item">
+						<i class="fa fa-eraser"></i>&nbsp;&nbsp;&nbsp;<span id="1">Erase Memory</span></a>
+					<a href="#" onclick="fsubmit(5); return false;" class="dropdown-item">
+						<i class="fa fa-server"></i>&nbsp;&nbsp;&nbsp;<span id="5">Memory Status</span></a>
+					<a href="#" onclick="fsubmit(3); return false;" class="dropdown-item">
+						<i id="toggleicon" class="fa fa-toggle-off"></i>&nbsp;&nbsp;&nbsp;<span id="3">Pause Logging</span></a>
+					<div class="dropdown-item">
+						<i class="fa fa-thermometer-3"></i>&nbsp;&nbsp;&nbsp;<span id="10">Temperature</span>
+						<input type="number" min="0" max="99" class="form-control" name="temptarget" id="temptarget" value="75" maxlength="2" size="2">
+					</div>
+					<div class="dropdown-item">
+						<i class="fa fa-cloud"></i>&nbsp;&nbsp;&nbsp;<span id="11">Humidity</span>
+						<input type="number" min="0" max="99" class="form-control" name="humtarget" id="humtarget" value="55" maxlength="2" size="2">
+					</div>
+					<div class="dropdown-item">
+						<i class="fa fa-podcast"></i>&nbsp;&nbsp;&nbsp;<span id="12">Set Alarms</span><br>
+						<input type="checkbox" id="hightemp">&nbsp;&nbsp;High temperature<br>
+						<input type="checkbox" id="lowtemp">&nbsp;&nbsp;Low temperature<br>
+						<input type="checkbox" id="highhum">&nbsp;&nbsp;High humidity<br>
+						<input type="checkbox" id="lowhum">&nbsp;&nbsp;Low humidity<br>
+					</div>
+					<a href="#" onclick="qsubmit(); return false;" class="dropdown-item bg-primary text-white" style="padding-top: 15px; padding-bottom: 15px;">
+						<span id="13">Save Settings</span></a>
+
+				</div>
+			</li>
+			<li class="nav-item dropdown" >
+				<a class="nav-link dropdown-toggle" href="#" id="timersDropdown" role="button" 
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-clock-o"></i>&nbsp;<span id="timerTitle">Timers</span>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="timersDropdown" style="width: 250px;">
+					<div class="dropdown-item" style="padding-top: 15px;">
+						<i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;<span id="14">Device 5 Timer</span><br>
+						<div class="name">On</div><div class="inputbox"><input type="time" id="dev5timerON" pattern="[0-9][0-9]\:[0-9][0-9]$" class="form-control" style="width: 130px;"></div>
+						<div class="name">Off</div><div class="inputbox"><input type="time" id="dev5timerOFF" pattern="[0-9][0-9]\:[0-9][0-9]$" class="form-control" style="width: 130px;"></div>
+					</div>
+					<div class="dropdown-item" style="padding-top: 15px;">
+						<i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;<span id="14">Device 6 Timer</span><br>
+						<div class="name">On</div><div class="inputbox"><input type="time" id="dev6timerON" pattern="[0-9][0-9]\:[0-9][0-9]$" class="form-control" style="width: 130px;"></div>
+						<div class="name">Off</div><div class="inputbox"><input type="time" id="dev6timerOFF" pattern="[0-9][0-9]\:[0-9][0-9]$" class="form-control" style="width: 130px;"></div>
+					</div>
+					<div class="dropdown-item" style="padding-top: 15px; margin-bottom: 15px;">
+						<i class="fa fa-clock-o"></i>&nbsp;&nbsp;&nbsp;<span id="14">Device 7 Timer</span><br>
+						<div class="name">On</div><div class="inputbox"><input type="time" id="dev7timerON" pattern="[0-9][0-9]\:[0-9][0-9]$" class="form-control" style="width: 130px;"></div>
+						<div class="name">Off</div><div class="inputbox"><input type="time" id="dev7timerOFF" pattern="[0-9][0-9]\:[0-9][0-9]$" class="form-control" style="width: 130px;"></div>
+					</div>
+					<div class="dropdown-item">&nbsp;</div>
+					<a href="#" onclick="xsubmit(); return false;" class="dropdown-item bg-primary text-white" style="padding-top: 15px; padding-bottom: 15px;">
+						<span id="13">Save Settings</span></a>
+				</div>
+			</li>
+			<li class="nav-item dropdown" style="margin-right: 50px;">
+				<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
+					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<i class="fa fa-hdd-o"></i>&nbsp;<span id="9">Device On/Off</span>
+				</a>
+				<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<a class="dropdown-item" href="#" onclick="dsubmit(1); return false;" id="dev1">Device 1 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(2); return false;" id="dev2">Device 2 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(3); return false;" id="dev3">Device 3 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(4); return false;" id="dev4">Device 4 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(5); return false;" id="dev5">Device 5 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(6); return false;" id="dev6">Device 6 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(7); return false;" id="dev7">Device 7 is ON</a>
+					<a class="dropdown-item" href="#" onclick="dsubmit(8); return false;" id="dev8">Device 8 is ON</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12" align="center">
+			<div id="alertzone">
+
+
+				<div class="alert alert-info" role="alert" id="alertbox">
+				  This is a info alert check it out!
+				</div>
+
+
+			</div>
+			<div style="width: 95%;">
+				<div class="container-fluid mt-3">
+					<div class="row">
+						<div class="col-md-4">
+							<div class="card border border-danger mt-3">
+								<div class="card-header">Air Temperature</div>
+								<div class="card-body">
+									<h1 class="card-title text-dark"><i class="fa fa-thermometer-3"></i>&nbsp;<span id="temp"></span>°</h1>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card border border-primary mt-3">
+								<div class="card-header">Air Humidity</div>
+								<div class="card-body">
+									<h1 class="card-title text-dark"><i class="fa fa-cloud"></i>&nbsp;<span id="hum"></span>%</h1>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="card border border-warning mt-3">
+								<div class="card-header">Light</div>
+								<div class="card-body">
+									<h1 class="card-title text-dark"><i class="fa fa-sun-o"></i>&nbsp;<span id="light"></span>%</h1>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<canvas id="myChart" width="400" height="250"></canvas>
+			</div>
+		</div>
+
+	</div>
+</div>
+<script>
+rawdata = [
+"1572892864:007819",
+"1572892874:007819",
+"1572892884:007819",
+"1572902894:007819",
+"1572892904:007820",
+"1572892914:007820",
+"1572892924:007813",
+"1572902934:007839",
+"1572892944:007843",
+"1572892954:007935",
+"1572892964:009130",
+"1572892974:009131",
+"1572892984:008138",
+"1572902994:008011",
+"1572893004:007909",
+"1572893014:007909",
+"1572893024:007926",
+"1572893034:007926",
+"1572949996:007528",
+"1572990006:007628",
+"1572950016:007628",
+"1572950026:007628",
+"1572950036:007628",
+"1572950046:007628",
+"1572950056:007628",
+"1572950066:007628",
+"1572950076:007628",
+"1572990086:007628",
+"1572950096:007628",
+"1572950106:007628",
+"1572950116:007628",
+"1572950126:007628",
+"1572950136:007628",
+"1572990146:007628",
+"1572950156:007628"
+];var thisip = "10.0.0.242";var devstate = [1,0,0,1,0,0,0,0];var logpaused = "1";var timezone = 0;var interval = "60";var targetTemp = 75;var targetHum = 50;var alarmstate = [0,1,0,0];var timers = ["--:--","--:--","13:45","23:30","--:--","--:--"];
+var config;
+var chart;
+var labels;
+var timestamp_list = [];
+var temp_list = [];
+var hum_list = [];
+var light_list = [];
+var temperature;
+var humidity;
+var light;
+var originalText;
+var waiting = 0;
+var intervallabel = "1 minute";
+setTimeout(function(){ document.getElementById('alertbox').style.opacity = 0; }, 4000);
+var ajaxRequest = null;
+var ajaxResult = null;
+if (window.XMLHttpRequest) { ajaxRequest =new XMLHttpRequest(); }
+else { ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP"); }
+function updateTimers() {
+	document.getElementById("dev5timerON").value = timers[0];
+	document.getElementById("dev5timerOFF").value = timers[1];
+	document.getElementById("dev6timerON").value = timers[2];
+	document.getElementById("dev6timerOFF").value = timers[3];
+	document.getElementById("dev7timerON").value = timers[4];
+	document.getElementById("dev7timerOFF").value = timers[5];
+}
+function updateSettings() {
+	document.getElementById("temptarget").value = targetTemp;
+	document.getElementById("humtarget").value = targetHum;
+	if (alarmstate[0] == 1) { document.getElementById("hightemp").checked = true; }
+	if (alarmstate[1] == 1) { document.getElementById("lowtemp").checked = true; }
+	if (alarmstate[2] == 1) { document.getElementById("highhum").checked = true; }
+	if (alarmstate[3] == 1) { document.getElementById("lowhum").checked = true; }
+}
+function updatePauseBtn() {
+	if (logpaused == "1") {
+		document.getElementById("toggleicon").className = "fa fa-toggle-on";
+		document.getElementById("3").innerHTML = "Resume logging";
+	}
+	else {
+		document.getElementById("toggleicon").className = "fa fa-toggle-off";
+		document.getElementById("3").innerHTML = "Pause logging";
+	}
+}
+function popupAlert(msg) {
+	document.getElementById('alertzone').innerHTML = '';
+	document.getElementById('alertzone').innerHTML = '<div class="alert alert-info" role="alert" id="alertbox">' + msg + '</div>';
+	document.getElementById('alertbox').style.opacity = 1;
+	setTimeout(function(){ document.getElementById('alertbox').style.opacity = 0; }, 4000);
+}
+function updateInterval() {
+	var minutes = interval / 60;
+	var hours;
+	var e = document.getElementById("7");
+	if (minutes > 59) {
+		hours = minutes / 60;
+		e.innerHTML = "Log every: " + hours + " hours";
+	}
+	else {
+		e.innerHTML = "Log every: " + minutes + " minutes";
+	}
+}
+function ajaxLoad(ajaxURL) {
+	if(!ajaxRequest){ alert("AJAX is not supported."); return; }
+	ajaxRequest.open("GET",ajaxURL,true);
+	ajaxRequest.onreadystatechange = function() {
+		if(ajaxRequest.readyState == 4 && ajaxRequest.status==200) {
+			ajaxResult = ajaxRequest.responseText;
+			if ((ajaxResult == "Logging has been paused") && (logpaused == "0")){
+				logpaused = "1";
+				updatePauseBtn();
+				document.getElementById("settings").innerHTML = "Settings";
+			}
+			else if ((ajaxResult == "Logging has resumed") && (logpaused == "1")){
+				logpaused = "0";
+				updatePauseBtn();
+				document.getElementById("settings").innerHTML = "Settings";
+			}
+			else if (ajaxResult == "Timezone has been updated") {
+				document.getElementById(waiting).innerHTML = "Timezone: " + timezone;
+			} 
+			else if (ajaxResult == "Logging interval has been updated") {
+				updateInterval();
+			}
+			else if (ajaxResult == "Device command accepted") {
+				if (devstate[waiting] == 1) { devstate[waiting] = 0; }
+				else { devstate[waiting] = 1; }
+				setDevStatus();
+				document.getElementById("9").innerHTML = "Set Device On/Off";
+			} 
+			else { 
+				document.getElementById(waiting).innerHTML = originalText;
+				document.getElementById("settings").innerHTML = "Settings";
+				document.getElementById("timerTitle").innerHTML = "Timers";
+			}
+			popupAlert(ajaxResult);
+			waiting = 0;
+		}
+	}
+	ajaxRequest.send();
+}
+function setDevStatus() {
+	for (i = 0; i < 8; i++) {
+		var p = i + 1;
+		document.getElementById("dev"+p).innerHTML = "Device " + p + " is " + onOff(devstate[i]);
+	}
+	document.getElementById("8").innerHTML = "Alarm is " + onOff(devstate[7]);
+}
+function onOff(which) {
+	if (which == 0) { return "<span class=\"text-danger\">Off</span>"; }
+	else if (which == 1) { return "<span class=\"text-success\">On</span>"; }
+	else { return "NaN"; }
+}
+function xsubmit() {
+	if (waiting == 0) {
+		var t1on = document.getElementById("dev5timerON").value;
+		var t2on = document.getElementById("dev6timerON").value;
+		var t3on = document.getElementById("dev7timerON").value;
+		var t1off = document.getElementById("dev5timerOFF").value;
+		var t2off = document.getElementById("dev6timerOFF").value;
+		var t3off = document.getElementById("dev7timerOFF").value;
+		var f = document.getElementById("13");
+		f.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		var g = document.getElementById("timerTitle");
+		g.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		waiting = 13;
+		originalText = f.innerHTML;
+		var url = "http://" + thisip + "?ARG=2&ARG1=" + t1on + "&ARG2=" + t2on + "&ARG3=" + t3on + "&ARG4=" + t1off + "&ARG5=" + t2off + "&ARG6=" + t3off;
+		ajaxLoad(url);
+	}
+}
+function dsubmit(dev) {
+	if (waiting == 0) {
+		var e = document.getElementById("dev"+dev);
+		var f = document.getElementById("9");
+		f.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		originalText = e.innerHTML;
+		e.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		if (dev == 8) {
+			document.getElementById("8").innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		}
+		waiting = dev - 1;
+		var url = "http://" + thisip + "?ARG=4&ARG2=" + dev;
+		ajaxLoad(url);
+	}
+}
+function qsubmit() {
+	if (waiting == 0) {
+		var f = document.getElementById("settings");
+		f.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		var e = document.getElementById("13");
+		originalText = e.innerHTML;
+		e.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		var tt = document.getElementById("temptarget").value;
+		var ht = document.getElementById("humtarget").value;
+		var url = "http://" + thisip + "?ARG=8&ARG2=" + tt + "&ARG3=" + ht;
+		if (document.getElementById("hightemp").checked) { url = url + "&ALM1=1"; }
+		else { url = url + "&ALM1=0"; }
+		if (document.getElementById("lowtemp").checked) { url = url + "&ALM2=1"; }
+		else { url = url + "&ALM2=0"; }
+		if (document.getElementById("highhum").checked) { url = url + "&ALM3=1"; }
+		else { url = url + "&ALM3=0"; }
+		if (document.getElementById("lowhum").checked) { url = url + "&ALM4=1"; }
+		else { url = url + "&ALM4=0"; }
+		waiting = 13;
+		ajaxLoad(url);
+	}
+}
+function fsubmit(btnnum) {
+	if (waiting == 0) {
+		var e = document.getElementById(btnnum);
+		var f = document.getElementById("settings");
+		originalText = e.innerHTML;
+		e.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		f.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		waiting = btnnum;
+		var url = "http://" + thisip + "?ARG=" + btnnum;
+		if (btnnum == 1) {
+			if (window.confirm("Are you sure you want to delete the entire log history? This cannot be undone.")) {
+				ajaxLoad(url);
+			}
+			else { return false; }
+		}
+		else { ajaxLoad(url); }
+	}
+}
+function tsubmit(tzone) {
+	if (waiting == 0) {
+		var e = document.getElementById("6");
+		e.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		waiting = 6;
+		var url = "http://" + thisip + "?ARG=6&ARG3=" + tzone;
+		timezone = tzone;
+		ajaxLoad(url);
+	}
+}
+function lsubmit(inter) {
+	if (waiting == 0) {
+		var e = document.getElementById("7");
+		e.innerHTML = '<div class="spinner-border spinner-border-sm text-info" role="status"></div>';
+		waiting = 7;
+		var url = "http://" + thisip + "?ARG=7&ARG4=" + inter;
+		interval = inter;
+		ajaxLoad(url);
+	}
+}
+function process_data() {
+	timestamp_list.length = 0;
+	hum_list.length = 0;
+	temp_list.length = 0;
+	light_list.length = 0;
+	for (i=0; i<rawdata.length; i++) {
+		var e = rawdata[i].split(":");
+		timestamp_list[i] = e[0];
+		hum_list[i] = e[1].substring(0,2);
+		temp_list[i] = e[1].substring(2,4);
+		light_list[i] = e[1].substring(4,6);
+	}
+}
+function updateHeader() {
+	document.getElementById("temp").innerHTML = temp_list[temp_list.length - 1];
+	document.getElementById("hum").innerHTML = hum_list[hum_list.length - 1];
+	document.getElementById("light").innerHTML = light_list[light_list.length - 1];
+}
+
+function make_labels() {
+	var ml = [];
+	ml.length = 0;
+	var sameDate = "";
+	for (i=0;i<timestamp_list.length;i++) {
+		var date = new Date(timestamp_list[i]*1000);
+		var hours = date.getHours();
+		var minutes = date.getMinutes();
+		var ampm = hours >= 12 ? 'pm' : 'am';
+		hours = hours % 12;
+		hours = hours ? hours : 12; // the hour '0' should be '12'
+		minutes = minutes < 10 ? '0'+minutes : minutes;
+		var day = date.getDate();
+		var month = date.getMonth();
+		var formattedTime = hours + ':' + minutes + ' ' + ampm;
+		var formattedDate = month + '/' + day;
+		if (formattedDate == sameDate) { ml[i] = formattedTime; }
+		else {
+			ml[i] = formattedDate + " " + formattedTime;
+			sameDate = formattedDate;
+		}
+	}
+	return ml;
+}
+function make_config() {
+	config = null;
+	config = {
+		type: 'line',
+		data: {
+			labels: labels,
+			datasets: [{
+				label: 'Soil Temperature',
+			    backgroundColor: 'rgb(255, 99, 132)',
+			    borderColor: 'rgb(255, 99, 132)',
+				data: temp_list,
+				fill: false,
+			}, {
+				label: 'Humidity',
+		    	backgroundColor: 'rgb(23, 37, 255)',
+		    	borderColor: 'rgb(23, 37, 255)',
+				fill: false,
+				data: hum_list,
+			}, {
+				label: 'Light',
+		    	backgroundColor: 'rgb(255, 255, 23)',
+		    	borderColor: 'rgb(255, 255, 23)',
+				fill: false,
+				data: light_list,
+			}]
+		},
+		options: {
+			responsive: true,
+			title: {
+				display: false,
+				text: 'Plant Stats'
+			},
+			legend: {
+				display: false
+			},
+			tooltips: {
+				mode: 'index',
+				intersect: false,
+			},
+			hover: {
+				mode: 'nearest',
+				intersect: true
+			},
+			scales: {
+				xAxes: [{
+					display: true,
+					scaleLabel: {
+						display: false,
+						labelString: 'Time'
+					}
+				}],
+				yAxes: [{
+					display: true,
+					scaleLabel: {
+						display: false,
+						labelString: 'Value'
+					}
+				}]
+			}
+		}
+	};
+}
+window.onload = function() {
+	process_data();
+	labels = make_labels();
+	make_config();
+	updateHeader();
+	document.getElementById("6").innerHTML = "Timezone: " + timezone;
+	updatePauseBtn();
+	updateInterval();
+	setDevStatus();
+	updateSettings();
+	updateTimers();
+	var ctx = document.getElementById('myChart').getContext('2d');
+	chart = new Chart(ctx, config);
+};
+</script>
+</body>
+</html>

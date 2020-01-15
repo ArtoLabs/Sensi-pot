@@ -1,0 +1,810 @@
+EESchema Schematic File Version 4
+LIBS:soil_sensor_kicad_tht-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:LED_CRGB D1
+U 1 1 5C311900
+P 7450 2350
+F 0 "D1" H 7450 2847 50  0000 C CNN
+F 1 "LED_CRGB" H 7450 2756 50  0000 C CNN
+F 2 "Soil_Sensor:LED_D5.0mm-4_RGB_Common_Cathode_2" H 7450 2300 50  0001 C CNN
+F 3 "~" H 7450 2300 50  0001 C CNN
+	1    7450 2350
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 4900 3650 4900
+Wire Wire Line
+	3650 4900 3650 5100
+$Comp
+L power:GND #PWR08
+U 1 1 5C3A1B98
+P 4850 4950
+F 0 "#PWR08" H 4850 4700 50  0001 C CNN
+F 1 "GND" H 4855 4777 50  0000 C CNN
+F 2 "" H 4850 4950 50  0001 C CNN
+F 3 "" H 4850 4950 50  0001 C CNN
+	1    4850 4950
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 5C3A1F82
+P 7900 2150
+F 0 "R5" V 8000 2150 50  0000 C CNN
+F 1 "R150" V 7900 2150 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 7830 2150 50  0001 C CNN
+F 3 "~" H 7900 2150 50  0001 C CNN
+	1    7900 2150
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R6
+U 1 1 5C3A2084
+P 7900 2350
+F 0 "R6" V 8000 2350 50  0000 C CNN
+F 1 "R390" V 7900 2350 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 7830 2350 50  0001 C CNN
+F 3 "~" H 7900 2350 50  0001 C CNN
+	1    7900 2350
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R7
+U 1 1 5C3A2105
+P 7900 2550
+F 0 "R7" V 8000 2550 50  0000 C CNN
+F 1 "R390" V 7900 2550 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 7830 2550 50  0001 C CNN
+F 3 "~" H 7900 2550 50  0001 C CNN
+	1    7900 2550
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R8
+U 1 1 5C3A2190
+P 8500 1600
+F 0 "R8" H 8570 1646 50  0000 L CNN
+F 1 "R220" H 8570 1555 50  0000 L CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 8430 1600 50  0001 C CNN
+F 3 "~" H 8500 1600 50  0001 C CNN
+	1    8500 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R9
+U 1 1 5C3A21F4
+P 9150 1600
+F 0 "R9" H 9220 1646 50  0000 L CNN
+F 1 "R220" H 9220 1555 50  0000 L CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 9080 1600 50  0001 C CNN
+F 3 "~" H 9150 1600 50  0001 C CNN
+	1    9150 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R10
+U 1 1 5C3A225F
+P 9800 1600
+F 0 "R10" H 9870 1646 50  0000 L CNN
+F 1 "R220" H 9870 1555 50  0000 L CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 9730 1600 50  0001 C CNN
+F 3 "~" H 9800 1600 50  0001 C CNN
+	1    9800 1600
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR011
+U 1 1 5C3A2494
+P 7250 2350
+F 0 "#PWR011" H 7250 2100 50  0001 C CNN
+F 1 "GND" V 7255 2222 50  0000 R CNN
+F 2 "" H 7250 2350 50  0001 C CNN
+F 3 "" H 7250 2350 50  0001 C CNN
+	1    7250 2350
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7650 2150 7750 2150
+Wire Wire Line
+	7650 2350 7750 2350
+Wire Wire Line
+	7650 2550 7750 2550
+Wire Wire Line
+	8050 2150 8300 2150
+Wire Wire Line
+	8050 2350 8950 2350
+Wire Wire Line
+	8050 2550 9600 2550
+$Comp
+L power:+5V #PWR016
+U 1 1 5C3A2718
+P 10550 2250
+F 0 "#PWR016" H 10550 2100 50  0001 C CNN
+F 1 "+5V" V 10565 2378 50  0000 L CNN
+F 2 "" H 10550 2250 50  0001 C CNN
+F 3 "" H 10550 2250 50  0001 C CNN
+	1    10550 2250
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8700 2150 10550 2150
+Wire Wire Line
+	10550 2150 10550 2250
+Wire Wire Line
+	9350 2350 10550 2350
+Wire Wire Line
+	10550 2350 10550 2250
+Connection ~ 10550 2250
+Wire Wire Line
+	10000 2550 10550 2550
+Wire Wire Line
+	10550 2550 10550 2350
+Connection ~ 10550 2350
+Wire Wire Line
+	8500 1750 8500 1850
+Wire Wire Line
+	9150 1750 9150 2050
+Wire Wire Line
+	9800 1750 9800 2250
+$Comp
+L power:+5V #PWR04
+U 1 1 5C3A2DA9
+P 2800 3750
+F 0 "#PWR04" H 2800 3600 50  0001 C CNN
+F 1 "+5V" H 2815 3923 50  0000 C CNN
+F 2 "" H 2800 3750 50  0001 C CNN
+F 3 "" H 2800 3750 50  0001 C CNN
+	1    2800 3750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2800 3900 2800 3800
+Text GLabel 3400 4300 2    50   Input ~ 0
+Red
+Text GLabel 3400 6400 2    50   Input ~ 0
+Green
+Text GLabel 3400 6500 2    50   Input ~ 0
+Blue
+Text GLabel 3400 6100 2    50   Input ~ 0
+SoilSensorOut
+$Comp
+L power:GND #PWR03
+U 1 1 5C3A3D23
+P 2700 6900
+F 0 "#PWR03" H 2700 6650 50  0001 C CNN
+F 1 "GND" H 2705 6727 50  0000 C CNN
+F 2 "" H 2700 6900 50  0001 C CNN
+F 3 "" H 2700 6900 50  0001 C CNN
+	1    2700 6900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 6400 3400 6400
+Wire Wire Line
+	3300 6500 3400 6500
+Wire Wire Line
+	3300 4300 3400 4300
+$Comp
+L Device:C_Small C2
+U 1 1 5C3A4FCB
+P 4400 4700
+F 0 "C2" H 4492 4746 50  0000 L CNN
+F 1 "C_Small" H 4492 4655 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 4400 4700 50  0001 C CNN
+F 3 "~" H 4400 4700 50  0001 C CNN
+	1    4400 4700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C3
+U 1 1 5C3A504C
+P 4400 5200
+F 0 "C3" H 4492 5246 50  0000 L CNN
+F 1 "C_Small" H 4492 5155 50  0000 L CNN
+F 2 "Capacitor_THT:C_Disc_D3.0mm_W1.6mm_P2.50mm" H 4400 5200 50  0001 C CNN
+F 3 "~" H 4400 5200 50  0001 C CNN
+	1    4400 5200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4400 4600 4850 4600
+Wire Wire Line
+	4850 4600 4850 4950
+Wire Wire Line
+	4400 5300 4850 5300
+Wire Wire Line
+	4850 5300 4850 4950
+Connection ~ 4850 4950
+$Comp
+L Device:R_PHOTO R1
+U 1 1 5C3A6AF8
+P 1600 1700
+F 0 "R1" H 1670 1746 50  0000 L CNN
+F 1 "R_PHOTO" H 1670 1655 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical" V 1650 1450 50  0001 L CNN
+F 3 "~" H 1600 1650 50  0001 C CNN
+	1    1600 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR02
+U 1 1 5C3A6B9C
+P 1600 2350
+F 0 "#PWR02" H 1600 2100 50  0001 C CNN
+F 1 "GND" H 1605 2177 50  0000 C CNN
+F 2 "" H 1600 2350 50  0001 C CNN
+F 3 "" H 1600 2350 50  0001 C CNN
+	1    1600 2350
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR01
+U 1 1 5C3A6BF2
+P 1600 1550
+F 0 "#PWR01" H 1600 1400 50  0001 C CNN
+F 1 "+5V" H 1615 1723 50  0000 C CNN
+F 2 "" H 1600 1550 50  0001 C CNN
+F 3 "" H 1600 1550 50  0001 C CNN
+	1    1600 1550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R2
+U 1 1 5C3A6C48
+P 1600 2200
+F 0 "R2" H 1670 2246 50  0000 L CNN
+F 1 "R1K" H 1670 2155 50  0000 L CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 1530 2200 50  0001 C CNN
+F 3 "~" H 1600 2200 50  0001 C CNN
+	1    1600 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1600 1850 1600 1950
+Text GLabel 1850 1950 2    50   Input ~ 0
+LDR
+Wire Wire Line
+	1850 1950 1600 1950
+Connection ~ 1600 1950
+Wire Wire Line
+	1600 1950 1600 2050
+Text GLabel 4300 5650 2    50   Input ~ 0
+LDR
+$Comp
+L Device:CP C1
+U 1 1 5C3AB45D
+P 2950 3800
+F 0 "C1" H 3068 3846 50  0000 L CNN
+F 1 "CP" H 3068 3755 50  0000 L CNN
+F 2 "Soil_Sensor:CP_Radial_D4.0mm_P1.50mm_bigger_pads" H 2988 3650 50  0001 C CNN
+F 3 "~" H 2950 3800 50  0001 C CNN
+	1    2950 3800
+	0    -1   -1   0   
+$EndComp
+Connection ~ 2800 3800
+Wire Wire Line
+	2800 3800 2800 3750
+$Comp
+L power:GND #PWR05
+U 1 1 5C3AC40F
+P 3100 3800
+F 0 "#PWR05" H 3100 3550 50  0001 C CNN
+F 1 "GND" V 3105 3672 50  0000 R CNN
+F 2 "" H 3100 3800 50  0001 C CNN
+F 3 "" H 3100 3800 50  0001 C CNN
+	1    3100 3800
+	0    -1   -1   0   
+$EndComp
+Text GLabel 8500 1350 1    50   Input ~ 0
+Red
+Text GLabel 9150 1350 1    50   Input ~ 0
+Green
+Text GLabel 9800 1350 1    50   Input ~ 0
+Blue
+Wire Wire Line
+	8500 1350 8500 1450
+Wire Wire Line
+	9150 1350 9150 1450
+Wire Wire Line
+	9800 1350 9800 1450
+$Comp
+L Device:R R3
+U 1 1 5C3AE5F7
+P 5050 1900
+F 0 "R3" V 4843 1900 50  0000 C CNN
+F 1 "R1K" V 4934 1900 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 4980 1900 50  0001 C CNN
+F 3 "~" H 5050 1900 50  0001 C CNN
+	1    5050 1900
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR06
+U 1 1 5C3AE688
+P 4750 1900
+F 0 "#PWR06" H 4750 1650 50  0001 C CNN
+F 1 "GND" V 4755 1772 50  0000 R CNN
+F 2 "" H 4750 1900 50  0001 C CNN
+F 3 "" H 4750 1900 50  0001 C CNN
+	1    4750 1900
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4750 1900 4900 1900
+Wire Wire Line
+	5200 1900 5350 1900
+Text GLabel 6000 1900 2    50   Input ~ 0
+SoilSensorOut
+Text GLabel 5350 2050 3    50   Input ~ 0
+SoilSensorIn
+Wire Wire Line
+	5350 1900 5350 2050
+$Comp
+L Connector_Generic:Conn_01x02 J1
+U 1 1 5C3B197D
+P 5600 1700
+F 0 "J1" V 5566 1512 50  0000 R CNN
+F 1 "Conn_01x02" V 5475 1512 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 5600 1700 50  0001 C CNN
+F 3 "~" H 5600 1700 50  0001 C CNN
+	1    5600 1700
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5350 1900 5600 1900
+Connection ~ 5350 1900
+Wire Wire Line
+	6000 1900 5700 1900
+Text GLabel 4300 5450 2    50   Input ~ 0
+SoilSensorIn
+$Comp
+L power:+5V #PWR013
+U 1 1 5C3B582B
+P 9150 4550
+F 0 "#PWR013" H 9150 4400 50  0001 C CNN
+F 1 "+5V" V 9165 4678 50  0000 L CNN
+F 2 "" H 9150 4550 50  0001 C CNN
+F 3 "" H 9150 4550 50  0001 C CNN
+	1    9150 4550
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR012
+U 1 1 5C3B58A4
+P 8650 5750
+F 0 "#PWR012" H 8650 5500 50  0001 C CNN
+F 1 "GND" H 8655 5577 50  0000 C CNN
+F 2 "" H 8650 5750 50  0001 C CNN
+F 3 "" H 8650 5750 50  0001 C CNN
+	1    8650 5750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 4400 3400 4400
+$Comp
+L Device:Thermistor TH1
+U 1 1 5C3B5269
+P 3200 2150
+F 0 "TH1" H 3305 2196 50  0000 L CNN
+F 1 "Thermistor" H 3305 2105 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0204_L3.6mm_D1.6mm_P1.90mm_Vertical" H 3200 2150 50  0001 C CNN
+F 3 "~" H 3200 2150 50  0001 C CNN
+	1    3200 2150
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R11
+U 1 1 5C3B5351
+P 3200 1700
+F 0 "R11" H 3270 1746 50  0000 L CNN
+F 1 "R10K" H 3270 1655 50  0000 L CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 3130 1700 50  0001 C CNN
+F 3 "~" H 3200 1700 50  0001 C CNN
+	1    3200 1700
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR015
+U 1 1 5C3B62EA
+P 3200 2450
+F 0 "#PWR015" H 3200 2300 50  0001 C CNN
+F 1 "+5V" H 3215 2623 50  0000 C CNN
+F 2 "" H 3200 2450 50  0001 C CNN
+F 3 "" H 3200 2450 50  0001 C CNN
+	1    3200 2450
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:GND #PWR014
+U 1 1 5C3B6381
+P 3200 1450
+F 0 "#PWR014" H 3200 1200 50  0001 C CNN
+F 1 "GND" H 3205 1277 50  0000 C CNN
+F 2 "" H 3200 1450 50  0001 C CNN
+F 3 "" H 3200 1450 50  0001 C CNN
+	1    3200 1450
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	3200 1450 3200 1550
+Wire Wire Line
+	3200 1850 3200 1900
+Wire Wire Line
+	3200 2350 3200 2450
+Text GLabel 3300 1900 2    50   Input ~ 0
+Thermistor
+Wire Wire Line
+	3300 1900 3200 1900
+Connection ~ 3200 1900
+Wire Wire Line
+	3200 1900 3200 1950
+Text GLabel 4300 5550 2    50   Input ~ 0
+Thermistor
+$Comp
+L Transistor_BJT:2N3904 Q1
+U 1 1 5C5BAFBA
+P 8500 2050
+F 0 "Q1" V 8736 2050 50  0000 C CNN
+F 1 "2N3904" V 8827 2050 50  0000 C CNN
+F 2 "Soil_Sensor:TO-92_Inline_bigger_pads" H 8700 1975 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 8500 2050 50  0001 L CNN
+	1    8500 2050
+	0    1    1    0   
+$EndComp
+$Comp
+L Transistor_BJT:2N3904 Q2
+U 1 1 5C5BC2ED
+P 9150 2250
+F 0 "Q2" V 9386 2250 50  0000 C CNN
+F 1 "2N3904" V 9477 2250 50  0000 C CNN
+F 2 "Soil_Sensor:TO-92_Inline_bigger_pads" H 9350 2175 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 9150 2250 50  0001 L CNN
+	1    9150 2250
+	0    1    1    0   
+$EndComp
+$Comp
+L Transistor_BJT:2N3904 Q3
+U 1 1 5C5BC352
+P 9800 2450
+F 0 "Q3" V 10036 2450 50  0000 C CNN
+F 1 "2N3904" V 10127 2450 50  0000 C CNN
+F 2 "Soil_Sensor:TO-92_Inline_bigger_pads" H 10000 2375 50  0001 L CIN
+F 3 "https://www.fairchildsemi.com/datasheets/2N/2N3904.pdf" H 9800 2450 50  0001 L CNN
+	1    9800 2450
+	0    1    1    0   
+$EndComp
+$Comp
+L MCU_Microchip_ATmega:ATmega328P-PU U1
+U 1 1 5C5BC906
+P 2700 5400
+F 0 "U1" H 2059 5446 50  0000 R CNN
+F 1 "ATmega328P-PU" H 2059 5355 50  0000 R CNN
+F 2 "Package_DIP:DIP-28_W7.62mm" H 2700 5400 50  0001 C CIN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega328_P%20AVR%20MCU%20with%20picoPower%20Technology%20Data%20Sheet%2040001984A.pdf" H 2700 5400 50  0001 C CNN
+	1    2700 5400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2100 3900 2100 4200
+Wire Wire Line
+	3650 5100 4150 5100
+Wire Wire Line
+	3300 4800 4150 4800
+$Comp
+L Device:Crystal Y1
+U 1 1 5C5CD63F
+P 4150 4950
+F 0 "Y1" V 4104 5081 50  0000 L CNN
+F 1 "Crystal" V 4195 5081 50  0000 L CNN
+F 2 "Crystal:Crystal_HC18-U_Vertical" H 4150 4950 50  0001 C CNN
+F 3 "~" H 4150 4950 50  0001 C CNN
+	1    4150 4950
+	0    1    1    0   
+$EndComp
+Connection ~ 4150 4800
+Wire Wire Line
+	4150 4800 4400 4800
+Connection ~ 4150 5100
+Wire Wire Line
+	4150 5100 4400 5100
+$Comp
+L Device:R R4
+U 1 1 5C5CDD88
+P 3600 5700
+F 0 "R4" V 3650 5950 50  0000 C CNN
+F 1 "R10K" V 3600 5700 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 3530 5700 50  0001 C CNN
+F 3 "~" H 3600 5700 50  0001 C CNN
+	1    3600 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+5V #PWR07
+U 1 1 5C5CDF99
+P 3750 5700
+F 0 "#PWR07" H 3750 5550 50  0001 C CNN
+F 1 "+5V" V 3765 5828 50  0000 L CNN
+F 2 "" H 3750 5700 50  0001 C CNN
+F 3 "" H 3750 5700 50  0001 C CNN
+	1    3750 5700
+	0    1    1    0   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x05 J3
+U 1 1 5C5CF48D
+P 6400 5250
+F 0 "J3" H 6480 5292 50  0000 L CNN
+F 1 "Conn_01x05" H 6480 5201 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 6400 5250 50  0001 C CNN
+F 3 "~" H 6400 5250 50  0001 C CNN
+	1    6400 5250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x03 J2
+U 1 1 5C5CF574
+P 5250 3700
+F 0 "J2" H 5330 3742 50  0000 L CNN
+F 1 "Conn_01x03" H 5330 3651 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 5250 3700 50  0001 C CNN
+F 3 "~" H 5250 3700 50  0001 C CNN
+	1    5250 3700
+	1    0    0    -1  
+$EndComp
+Text GLabel 3400 4700 2    50   Input ~ 0
+SCK
+Text GLabel 3400 4600 2    50   Input ~ 0
+MISO
+Text GLabel 3400 4500 2    50   Input ~ 0
+MOSI
+Wire Wire Line
+	3400 4700 3300 4700
+Wire Wire Line
+	3400 4600 3300 4600
+Wire Wire Line
+	3400 4500 3300 4500
+Text GLabel 3450 5800 2    50   Input ~ 0
+Reset
+Wire Wire Line
+	3300 5700 3450 5700
+Wire Wire Line
+	3450 5800 3450 5700
+Connection ~ 3450 5700
+Text GLabel 3400 5900 2    50   Input ~ 0
+RX
+Text GLabel 3400 6000 2    50   Input ~ 0
+TX
+Wire Wire Line
+	3300 5900 3400 5900
+Wire Wire Line
+	3300 6000 3400 6000
+$Comp
+L power:GND #PWR09
+U 1 1 5C5D9DD8
+P 5050 3600
+F 0 "#PWR09" H 5050 3350 50  0001 C CNN
+F 1 "GND" H 5055 3427 50  0000 C CNN
+F 2 "" H 5050 3600 50  0001 C CNN
+F 3 "" H 5050 3600 50  0001 C CNN
+	1    5050 3600
+	-1   0    0    1   
+$EndComp
+Text GLabel 4950 3700 0    50   Input ~ 0
+RX
+Text GLabel 4950 3800 0    50   Input ~ 0
+TX
+Wire Wire Line
+	4950 3700 5050 3700
+Wire Wire Line
+	4950 3800 5050 3800
+$Comp
+L power:GND #PWR010
+U 1 1 5C5DCECC
+P 6200 5050
+F 0 "#PWR010" H 6200 4800 50  0001 C CNN
+F 1 "GND" H 6205 4877 50  0000 C CNN
+F 2 "" H 6200 5050 50  0001 C CNN
+F 3 "" H 6200 5050 50  0001 C CNN
+	1    6200 5050
+	-1   0    0    1   
+$EndComp
+Text GLabel 6100 5150 0    50   Input ~ 0
+SCK
+Text GLabel 6100 5250 0    50   Input ~ 0
+MISO
+Text GLabel 6100 5350 0    50   Input ~ 0
+MOSI
+Text GLabel 6100 5450 0    50   Input ~ 0
+Reset
+Wire Wire Line
+	6200 5150 6100 5150
+Wire Wire Line
+	6200 5250 6100 5250
+Wire Wire Line
+	6200 5350 6100 5350
+Wire Wire Line
+	6200 5450 6100 5450
+Connection ~ 2700 3900
+Connection ~ 2800 3900
+Wire Wire Line
+	2700 3900 2100 3900
+Wire Wire Line
+	2800 3900 2700 3900
+Wire Wire Line
+	4200 5600 4200 5650
+Wire Wire Line
+	4200 5650 4300 5650
+Text GLabel 3400 4400 2    50   Input ~ 0
+SS
+$Comp
+L Connector:USB3_A J4
+U 1 1 5C6F430A
+P 8650 4950
+F 0 "J4" H 8705 5667 50  0000 C CNN
+F 1 "USB3_A" H 8705 5576 50  0000 C CNN
+F 2 "Soil_Sensor:USB3_A_Molex_Edited" H 8800 5050 50  0001 C CNN
+F 3 "~" H 8800 5050 50  0001 C CNN
+	1    8650 4950
+	1    0    0    -1  
+$EndComp
+Text GLabel 9150 5450 2    50   Input ~ 0
+MOSI
+Text GLabel 10400 4850 2    50   Input ~ 0
+MISO
+Text GLabel 9150 4750 2    50   Input ~ 0
+SCK
+Text GLabel 10000 5100 2    50   Input ~ 0
+SS
+Wire Wire Line
+	3300 5600 4200 5600
+Wire Wire Line
+	3800 5550 3800 5500
+Wire Wire Line
+	3800 5500 3300 5500
+Wire Wire Line
+	3800 5550 4300 5550
+Wire Wire Line
+	3900 5450 3900 5400
+Wire Wire Line
+	3900 5400 3300 5400
+Wire Wire Line
+	3900 5450 4300 5450
+Wire Wire Line
+	3300 6100 3400 6100
+$Comp
+L Device:Buzzer BZ1
+U 1 1 5C71B303
+P 5800 6700
+F 0 "BZ1" H 5953 6729 50  0000 L CNN
+F 1 "Buzzer" H 5953 6638 50  0000 L CNN
+F 2 "Buzzer_Beeper:Buzzer_12x9.5RM7.6" V 5775 6800 50  0001 C CNN
+F 3 "~" V 5775 6800 50  0001 C CNN
+	1    5800 6700
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R12
+U 1 1 5C71B3A4
+P 5550 6800
+F 0 "R12" V 5700 7000 50  0000 C CNN
+F 1 "R220" V 5550 6800 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 5480 6800 50  0001 C CNN
+F 3 "~" H 5550 6800 50  0001 C CNN
+	1    5550 6800
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR017
+U 1 1 5C71B4DB
+P 5400 6800
+F 0 "#PWR017" H 5400 6550 50  0001 C CNN
+F 1 "GND" V 5405 6672 50  0000 R CNN
+F 2 "" H 5400 6800 50  0001 C CNN
+F 3 "" H 5400 6800 50  0001 C CNN
+	1    5400 6800
+	0    1    1    0   
+$EndComp
+Text GLabel 5700 6600 0    50   Input ~ 0
+Buzzer
+Text GLabel 3400 6200 2    50   Input ~ 0
+Buzzer
+Wire Wire Line
+	3300 6200 3400 6200
+$Comp
+L 74xGxx:74LVC1G125 U2
+U 1 1 5CAECD94
+P 9900 4850
+F 0 "U2" H 9875 4676 50  0000 C CNN
+F 1 "74LVC1G125" H 9875 4585 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-5_HandSoldering" H 9900 4850 50  0001 C CNN
+F 3 "http://www.ti.com/lit/sg/scyt129e/scyt129e.pdf" H 9900 4850 50  0001 C CNN
+	1    9900 4850
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9650 4850 9600 4850
+Wire Wire Line
+	9900 5050 9900 5100
+Wire Wire Line
+	10400 4850 10200 4850
+$Comp
+L Device:R R13
+U 1 1 5CB0A537
+P 9450 4850
+F 0 "R13" V 9350 4800 50  0000 C CNN
+F 1 "R50" V 9450 4850 50  0000 C CNN
+F 2 "Soil_Sensor:R_Axial_DIN0204_L3.6mm_D1.6mm_P7.62mm_Horizontal_bigger_pads_3" V 9380 4850 50  0001 C CNN
+F 3 "~" H 9450 4850 50  0001 C CNN
+	1    9450 4850
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	9300 4850 9150 4850
+Wire Wire Line
+	9700 5100 9900 5100
+Wire Wire Line
+	10000 5100 9900 5100
+Connection ~ 9900 5100
+Wire Wire Line
+	8650 5650 8650 5750
+$Comp
+L Mechanical:MountingHole H1
+U 1 1 5CB7E141
+P 6950 3550
+F 0 "H1" H 7050 3596 50  0000 L CNN
+F 1 "MountingHole" H 7050 3505 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 6950 3550 50  0001 C CNN
+F 3 "~" H 6950 3550 50  0001 C CNN
+	1    6950 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H2
+U 1 1 5CB7E275
+P 6950 3850
+F 0 "H2" H 7050 3896 50  0000 L CNN
+F 1 "MountingHole" H 7050 3805 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 6950 3850 50  0001 C CNN
+F 3 "~" H 6950 3850 50  0001 C CNN
+	1    6950 3850
+	1    0    0    -1  
+$EndComp
+$Comp
+L Mechanical:MountingHole H3
+U 1 1 5CF5744A
+P 8100 3550
+F 0 "H3" H 8200 3596 50  0000 L CNN
+F 1 "MountingHole" H 8200 3505 50  0000 L CNN
+F 2 "MountingHole:MountingHole_3.2mm_M3" H 8100 3550 50  0001 C CNN
+F 3 "~" H 8100 3550 50  0001 C CNN
+	1    8100 3550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8650 5650 8550 5650
+Wire Wire Line
+	8550 5650 8450 5650
+Connection ~ 8650 5650
+Connection ~ 8550 5650
+Wire Wire Line
+	9700 5100 9700 5350
+Wire Wire Line
+	9700 5350 9150 5350
+NoConn ~ 9150 5050
+NoConn ~ 9150 5150
+NoConn ~ 9250 5800
+$EndSCHEMATC
